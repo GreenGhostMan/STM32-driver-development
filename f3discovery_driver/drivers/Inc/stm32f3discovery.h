@@ -12,6 +12,21 @@
 
 #define __vo						volatile
 
+// PROcessor specific peripherals
+#define NVIC_ISER0					(__vo uint32_t*)0xE000E100;
+#define NVIC_ISER1					(__vo uint32_t*)0xE000E104;
+#define NVIC_ISER2					(__vo uint32_t*)0xE000E108;
+#define NVIC_ISER3					(__vo uint32_t*)0xE000E10C;
+
+#define NVIC_ICER0					(__vo uint32_t*)0xE000E180;
+#define NVIC_ICER1					(__vo uint32_t*)0xE000E184;
+#define NVIC_ICER2					(__vo uint32_t*)0xE000E188;
+#define NVIC_ICER3					(__vo uint32_t*)0xE000E18C;
+
+#define NVIC_PR_BASEADDR			(__vo uint32_t*)0xE000E400;
+#define NO_PR_BITS_IMPLEMENTED		4
+
+//
 #define FLASH_BASEADDR				0x08000000U
 #define SRAM1_BASEADDR				0x20000000U
 #define SRAM 						SRAM1_BASEADDR
@@ -85,6 +100,25 @@ typedef struct {
 	__vo uint32_t CFGR3;
 }RCC_RegDef_t;
 
+typedef struct {
+	__vo uint32_t IMR;
+	__vo uint32_t EMR;
+	__vo uint32_t RTSR;
+	__vo uint32_t FTSR;
+	__vo uint32_t SWIER;
+	__vo uint32_t PR;
+}EXTI_RegDef_t;
+
+typedef struct {
+	__vo uint32_t MEMRMP;
+	__vo uint32_t PMC;
+	__vo uint32_t EXTICR[4];
+	uint32_t RESERVED1[1];
+	__vo uint32_t CMPCR;
+	uint32_t RESERVED2[2];
+	__vo uint32_t CFGR;
+}SYSCFG_RegDef_t;
+
 // peripheral definition
 #define GPIOA						((GPIO_RegDef_t*)GPIOA_BASEADDR )
 #define GPIOB						((GPIO_RegDef_t*)GPIOB_BASEADDR )
@@ -94,6 +128,8 @@ typedef struct {
 #define GPIOF						((GPIO_RegDef_t*)GPIOF_BASEADDR )
 
 #define RCC							((RCC_RegDef_t*)RCC_BASEADDR )
+#define EXTI						((EXTI_RegDef_t*)EXTI_BASEADDR )
+#define SYSCFG						((SYSCFG_RegDef_t*)SYSCFG_BASEADDR )
 
 // clock enable for gpioX peripheral
 #define GPIOA_PCLK_EN()				( RCC->AHBENR |= (1<<17) )
@@ -118,6 +154,8 @@ typedef struct {
 #define UART4_PCLK_EN()				( RCC->APB1ENR |= (1<<19) )
 #define UART5_PCLK_EN()				( RCC->APB1ENR |= (1<<20) )
 
+// clock enable macro for syscfg peripheral
+#define SYSCFG_PCLK_EN()			( RCC->APB2ENR |= (1<<0)  )
 // clock disable for gpioX peripheral
 #define GPIOA_PCLK_DI()				( RCC->AHBENR &= ~(1<<17) )
 #define GPIOB_PCLK_DI()				( RCC->AHBENR &= ~(1<<18) )
@@ -148,6 +186,23 @@ typedef struct {
 #define GPIOD_REG_RESET()			do{( RCC->AHBRSTR |= (1<<20) );  ~( RCC->AHBRSTR &= (1<<20) );}while(0)
 #define GPIOE_REG_RESET()			do{( RCC->AHBRSTR |= (1<<21) );  ~( RCC->AHBRSTR &= (1<<21) );}while(0)
 #define GPIOF_REG_RESET()			do{( RCC->AHBRSTR |= (1<<22) );  ~( RCC->AHBRSTR &= (1<<22) );}while(0)
+
+#define GPIO_BASEADDR_TO_CODE(x)    ( (x == GPIOA) ? 0 : \
+									  (x == GPIOB) ? 1 : \
+									  (x == GPIOC) ? 2 : \
+									  (x == GPIOD) ? 3 : \
+									  (x == GPIOE) ? 4 : \
+									  (x == GPIOF) ? 5 :0 )
+
+// IRQ NUMBERS
+#define IRQ_NO_EXTI0				6
+#define IRQ_NO_EXTI1				7
+#define IRQ_NO_EXTI2				8
+#define IRQ_NO_EXTI3				9
+#define IRQ_NO_EXTI4				10
+#define IRQ_NO_EXTI9_5				23
+#define IRQ_NO_EXTI15_10			40
+
 // somge generic macro
 #define ENABLE 						1
 #define DISABLE 					0

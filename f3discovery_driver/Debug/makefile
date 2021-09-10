@@ -61,8 +61,8 @@ all: main-build
 main-build: f3discovery_driver.elf secondary-outputs
 
 # Tool invocations
-f3discovery_driver.elf: $(OBJS) $(USER_OBJS) /home/robot/AllSTM32/STM32Workspace/CubeIDE/f3discovery_driver/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "f3discovery_driver.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/robot/AllSTM32/STM32Workspace/CubeIDE/f3discovery_driver/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="f3discovery_driver.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+f3discovery_driver.elf: $(OBJS) $(USER_OBJS) /home/robot/Desktop/STM32-driver-development/f3discovery_driver/STM32F303VCTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "f3discovery_driver.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/home/robot/Desktop/STM32-driver-development/f3discovery_driver/STM32F303VCTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="f3discovery_driver.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
